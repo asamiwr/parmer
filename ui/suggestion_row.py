@@ -7,7 +7,7 @@ from core.suggestions import Suggestion
 
 
 class SuggestionRow(Gtk.Button):
-    def __init__(self, suggestion: Suggestion, index, callback):
+    def __init__(self, suggestion: Suggestion, original_text, index, callback):
         super().__init__()
 
         self.index = index
@@ -20,10 +20,16 @@ class SuggestionRow(Gtk.Button):
             spacing=4,
         )
 
-        original = Gtk.Label(
-            label=suggestion.replacements[0]
+        original_word = original_text[suggestion.start:suggestion.end]
+
+        replacement = (
+            suggestion.replacements[0]
             if suggestion.replacements
-            else "",
+            else ""
+        )
+
+        original = Gtk.Label(
+            label=f"{original_word} → {replacement}",
         )
         original.set_xalign(0)
         original.add_css_class("suggestion-replacement")
@@ -31,12 +37,8 @@ class SuggestionRow(Gtk.Button):
         message = Gtk.Label(
             label=suggestion.message,
         )
-        message.set_xalign(0)
-        message.set_wrap(True)
-        message.add_css_class("suggestion-message")
 
         box.append(original)
-        # box.append(message)
 
         self.set_child(box)
 

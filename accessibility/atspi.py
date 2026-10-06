@@ -60,7 +60,7 @@ def show_popup_at_caret(context, suggestions):
     if popup_controller is None or popup is None:
         return
 
-    popup_controller.show_at_caret(popup, caret, suggestions)
+    popup_controller.show_at_caret(popup, caret, suggestions, context.text)
 
 
 def create_check_request():

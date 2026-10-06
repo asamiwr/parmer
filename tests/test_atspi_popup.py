@@ -22,8 +22,21 @@ def test_on_text_checked_shows_popup(monkeypatch):
     shown = []
 
     class FakePopupController:
-        def show_at_caret(self, popup, caret, suggestions):
-            shown.append((popup, caret, suggestions))
+        def show_at_caret(
+            self,
+            popup,
+            caret,
+            suggestions,
+            original_text,
+        ):
+            shown.append(
+                (
+                    popup,
+                    caret,
+                    suggestions,
+                    original_text,
+                )
+            )
 
     popup = object()
     controller = FakePopupController()
@@ -72,7 +85,8 @@ def test_on_text_checked_shows_popup(monkeypatch):
 
     assert len(shown) == 1
 
-    shown_popup, caret, shown_suggestions = shown[0]
+    shown_popup, caret, shown_suggestions, original_text = shown[0]
+    assert original_text == "this are amir"
 
     assert shown_popup is popup
 
@@ -88,8 +102,21 @@ def test_caret_move_repositions_popup(monkeypatch):
     shown = []
 
     class FakePopupController:
-        def show_at_caret(self, popup, caret, suggestions):
-            shown.append((popup, caret, suggestions))
+        def show_at_caret(
+            self,
+            popup,
+            caret,
+            suggestions,
+            original_text,
+        ):
+            shown.append(
+                (
+                    popup,
+                    caret,
+                    suggestions,
+                    original_text,
+                )
+            )
 
     popup = object()
     controller = FakePopupController()
@@ -154,7 +181,8 @@ def test_caret_move_repositions_popup(monkeypatch):
 
     assert len(shown) == 1
 
-    shown_popup, caret, shown_suggestions = shown[0]
+    shown_popup, caret, shown_suggestions, original_text = shown[0]
+    assert original_text == "this are amir"
 
     assert shown_popup is popup
     assert caret.x == 300

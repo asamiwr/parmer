@@ -48,7 +48,7 @@ class PopupController:
 
         return monitor, position
 
-    def show(self, popup, caret, popup_width, popup_height, suggestions):
+    def show(self, popup, caret, popup_width, popup_height, suggestions, original_text):
         result = self.get_position(
             caret,
             popup_width=popup_width,
@@ -73,9 +73,9 @@ class PopupController:
         if self.apply_callback is not None:
             popup.on_apply_requested(self.apply_callback)
 
-        popup.show(monitor, position, suggestions)
+        popup.show(monitor, position, suggestions, original_text)
 
         return True
 
-    def show_at_caret(self, popup, caret, suggestions):
-        return self.show(popup, caret, popup_width=320, popup_height=100, suggestions=suggestions)
+    def show_at_caret(self, popup, caret, suggestions, original_text):
+        return self.show(popup, caret, popup_width=320, popup_height=100, suggestions=suggestions, original_text=original_text)

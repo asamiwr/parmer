@@ -29,7 +29,7 @@ class LayerShellBackend:
         if self.apply_callback is not None:
             self.apply_callback(index)
 
-    def _update_content(self, suggestions):
+    def _update_content(self, suggestions, original_text):
         if self.content_box is None:
             self.content_box = Gtk.Box(
                 orientation=Gtk.Orientation.VERTICAL,
@@ -55,6 +55,7 @@ class LayerShellBackend:
         for index, suggestion in enumerate(suggestions):
             row = SuggestionRow(
                 suggestion=suggestion,
+                original_text=original_text,
                 index=index,
                 callback=self._on_suggestion_clicked,
             )
@@ -64,7 +65,7 @@ class LayerShellBackend:
 
         return box
 
-    def show(self, monitor, position, suggestions):
+    def show(self, monitor, position, suggestions, original_text):
         if self.window is None:
             window = Gtk.Window(application=self.application)
             window.set_default_size(320, 100)
@@ -107,7 +108,7 @@ class LayerShellBackend:
             position.x,
         )
 
-        content = self._update_content(suggestions)
+        content = self._update_content(suggestions, original_text)
 
         if window.get_child() is None:
             window.set_child(content)

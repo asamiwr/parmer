@@ -25,8 +25,9 @@ class FakeWindow:
 
 
 class FakeSuggestionRow:
-    def __init__(self, suggestion, index, callback):
+    def __init__(self, suggestion, original_text, index, callback):
         self.suggestion = suggestion
+        self.original_text = original_text
         self.index = index
         self.callback = callback
         self.next_sibling = None
@@ -119,9 +120,10 @@ def setup_layer_shell_mocks(monkeypatch):
         created_windows.append(window)
         return window
 
-    def fake_row(suggestion, index, callback):
+    def fake_row(suggestion, original_text, index, callback):
         row = FakeSuggestionRow(
             suggestion,
+            original_text,
             index,
             callback,
         )
@@ -268,13 +270,13 @@ def test_show_creates_window_once(monkeypatch):
 
     monitor = object()
     position = make_position()
-
     suggestions = [object()]
 
     backend.show(
         monitor,
         position,
         suggestions,
+        original_text="this are",
     )
 
     first_window = backend.window
@@ -283,6 +285,7 @@ def test_show_creates_window_once(monkeypatch):
         monitor,
         position,
         suggestions,
+        original_text="this are",
     )
 
     second_window = backend.window
@@ -314,6 +317,7 @@ def test_show_updates_suggestions(monkeypatch):
         monitor,
         position,
         first_suggestions,
+        original_text="this are",
     )
 
     assert len(created_rows) == 2
@@ -324,6 +328,7 @@ def test_show_updates_suggestions(monkeypatch):
         monitor,
         position,
         second_suggestions,
+        original_text="this are",
     )
 
     assert len(created_rows) == 3
@@ -344,11 +349,13 @@ def test_show_updates_window_position(monkeypatch):
         x=120,
         y=240,
     )
+    suggestions = [object()]
 
     backend.show(
         monitor,
         position,
-        [object()],
+        suggestions,
+        original_text="this are",
     )
 
     assert backend.window is not None
@@ -363,11 +370,13 @@ def test_hide_closes_window(monkeypatch):
 
     monitor = object()
     position = make_position()
+    suggestions = [object()]
 
     backend.show(
         monitor,
         position,
-        [object()],
+        suggestions,
+        original_text="this are",
     )
 
     window = backend.window

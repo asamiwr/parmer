@@ -18,6 +18,7 @@ def test_suggestion_row_stores_suggestion():
 
     row = SuggestionRow(
         suggestion=suggestion,
+        original_text="this are",
         index=0,
         callback=lambda index: None,
     )
@@ -41,6 +42,7 @@ def test_suggestion_row_click_calls_callback():
 
     row = SuggestionRow(
         suggestion=suggestion,
+        original_text="this are",
         index=3,
         callback=callback,
     )
@@ -48,3 +50,24 @@ def test_suggestion_row_click_calls_callback():
     row._on_clicked(None, callback)
 
     assert clicked == [3]
+
+
+def test_suggestion_row_displays_original_and_replacement():
+    suggestion = Suggestion(
+        message="Use these instead.",
+        start=0,
+        end=4,
+        replacements=["these"],
+    )
+
+    row = SuggestionRow(
+        suggestion=suggestion,
+        original_text="this are",
+        index=0,
+        callback=lambda index: None,
+    )
+
+    box = row.get_child()
+    label = box.get_first_child()
+
+    assert label.get_text() == "this → these"
